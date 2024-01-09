@@ -15,10 +15,10 @@ function App() {
    <BrowserRouter>
     <Routes>
       <Route path='/' element={<Dashboard />} />
-      <Route path='/posts' element={<Dashboard />} />
-      <Route path='/post/:id' element={<SinglePost />} />
-      <Route path='/post/edit/:id' element={<EditPost />} />
-      <Route path='/post/create' element={<CreatePost />} />
+      <Route path='/polls' element={<Dashboard />} />
+      <Route path='/polls/:id' element={<SinglePost />} />
+      {/* <Route path='/post/edit/:id' element={<EditPost />} /> */}
+      <Route path='/polls/new' element={<CreatePost />} />
     </Routes>
    
    

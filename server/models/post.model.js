@@ -1,29 +1,43 @@
 const mongoose = require('mongoose');
-const PostSchema = new mongoose.Schema({
-    title: { 
+const Poll = new mongoose.Schema({
+    question: { 
         type: String,
-        minLength: [2, 'The title should be more then 2 characters'],
+        minLength: [10, 'The question should be more then 10 characters'],
         required: [true, 'The title is required']
     },
-    content: { 
+    option1: { 
         type: String,
-        minLength: [2, 'The content should be more then 2 characters'],
-        required: [true, 'The content is required']
+        required: [true, 'First option is required']
     },
-    imageUrl: { 
+    option2: { 
         type: String,
-        required: [true, 'The image is required']
+        required: [true, 'Second option is required']
     },
-    reviews : [
-        {
-            text: {
-                type: String
-            },
-            rating: {
-                type: Number
-            }
-        }
-    ]
-   
+    option3: { 
+        type: String
+    },
+    option4: { 
+        type: String
+    },
+    option1Votes: {
+        type: Number,
+        default: 0
+    },
+    option2Votes: {
+        type: Number,
+        default: 0
+    },
+    option3Votes: {
+        type: Number,
+        default: 0
+    },
+    option4Votes: {
+        type: Number,
+        default: 0
+    },
+    votesCount: {
+        type: Number,
+        default: 0
+    }   
 }, { timestamps: true });
-module.exports = mongoose.model('Post', PostSchema);
+module.exports = mongoose.model('Poll', Poll);
