@@ -7,18 +7,32 @@ import CreatePost from './components/CreatePost';
 import Dashboard from './components/Dashboard';
 import EditPost from './components/EditPost';
 import SinglePost from './components/SinglePost';
-
+import { AuthProvider, useAuth } from './AuthContext';
+import LoginPage from './views/LoginPage';
+import WelcomePage from './components/WelcomePage';
 function App() {
-  const [count, setCount] = useState(0)
-
+  const { user } = useAuth();
+  const token = localStorage.getItem('token');
   return (
    <BrowserRouter>
     <Routes>
-      <Route path='/' element={<Dashboard />} />
-      <Route path='/polls' element={<Dashboard />} />
-      <Route path='/polls/:id' element={<SinglePost />} />
-      {/* <Route path='/post/edit/:id' element={<EditPost />} /> */}
-      <Route path='/polls/new' element={<CreatePost />} />
+    {token ? (
+          <>
+            <Route path='/dashboard' element={<Dashboard user={user} />} />
+            <Route path='/polls' element={<Dashboard user={user} />} />
+            <Route path='/polls/:id' element={<SinglePost user={user} />} />
+            <Route path='/polls/new' element={<CreatePost user={user} />} />
+            <Route path='/polls/edit/:id' element={<EditPost user={user} />} />
+
+           
+          </>
+        ) : (
+          <>         
+          <Route path='*' element={<WelcomePage />} />
+          <Route path='/loginPage' element={<LoginPage />} />
+          </>
+
+        )}
     </Routes>
    
    

@@ -2,13 +2,18 @@ import React, {useEffect, useState} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios'
 import moment from 'moment'
-const Dashboard = (props) => {
+import { useAuth } from '../AuthContext';
 
+const Dashboard = (props) => {
+  const { logout } = useAuth();
     const [polls, setPolls] = useState([])
     const [top3, setTop3] = useState([])
+    const userId = localStorage.getItem('userId');
 
     useEffect(()=>{
-    	axios.get("http://localhost:8000/api/polls")
+    	axios.get("http://localhost:8000/api/polls",   { 
+        withCredentials: true
+      })
     	.then((res)=>{
 	    console.log(res.data);
             setPolls(res.data.polls);
@@ -17,7 +22,9 @@ const Dashboard = (props) => {
             console.log(err);
     	})
 
-      axios.get("http://localhost:8000/api/polls/top3")
+      axios.get("http://localhost:8000/api/polls/top3",   { 
+        withCredentials: true
+      })
     	.then((res)=>{
 	    console.log(res.data);
             setTop3(res.data.polls);
@@ -29,10 +36,23 @@ const Dashboard = (props) => {
 
     }, [])
 
+    const handleLogout = async (e) => {
+      e.preventDefault();
+
+      try {
+          // Call the logout function from the AuthContext
+          await logout();
+          navigate('/')
+          // Redirect or perform any other actions after successful registration
+      } catch (error) {
+          // Handle registration error
+      }
+  };
     return(
        <>
        <nav className="d-flex justify-content-end">
        <Link className=" btn btn-outline-primary customColor" to={'/polls/new'}>Create a new poll</Link>
+       <button onClick={handleLogout}>Logout</button>
        </nav>
        
         <div className="row">
@@ -47,6 +67,7 @@ const Dashboard = (props) => {
                     <div className="card-body">
                     <Link className="card-title" to={`/polls/${post._id}`}>{post.question}</Link>
 
+
                       <h6 className="card-subtitle mb-2 text-muted"></h6>
                       <p className="card-text">{post.option1}: {post.option1Votes}</p>
                       <p className="card-text">{post.option2}: {post.option2Votes}</p>
@@ -59,6 +80,12 @@ const Dashboard = (props) => {
 
                       }
                       <p>{moment(post.createdAt).fromNow()}</p>
+                      {
+                        userId == post.userId?
+                        <Link className="card-title" to={`/polls/edit/${post._id}`}>Edit</Link>:
+                        null
+
+                      }
 
                      
                     </div>
@@ -105,10 +132,13 @@ const Dashboard = (props) => {
                       {
                       post.option4 != ''?<p className="card-text">{post.option4}: {post.option4Votes}</p>: null
 
+                      }
+                      {
+                        userId == post.userId?
+                        <Link className="card-title" to={`/polls/edit/${post._id}`}>Edit</Link>:
+                        null
 
                       }
-
-                     
                     </div>
                   </div>
                

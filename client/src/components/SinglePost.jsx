@@ -13,7 +13,7 @@ const SinglePost = (props) => {
         navigate(-1)
     }
     useEffect(()=>{
-    	axios.get(`http://localhost:8000/api/poll/${id}`)
+    	axios.get(`http://localhost:8000/api/poll/${id}`, {withCredentials:true})
     	.then((res)=>{
             setPoll(res.data.poll);
 	})
@@ -30,7 +30,8 @@ const SinglePost = (props) => {
         
         axios.put(`http://localhost:8000/api/poll/${id}`, 
                 pollToUpdate
-            )
+            ,
+            {withCredentials:true})
                 .then(res=>{
                     setHasVoted(true)
                     setPoll(res.data.poll)
@@ -45,9 +46,10 @@ const SinglePost = (props) => {
             let pollToUpdate = {...poll}
             pollToUpdate.option2Votes += 1
             pollToUpdate.votesCount += 1
-            axios.put(`http://localhost:8000/api/poll/${id}`, 
+            axios.put(`http://localhost:8000/api/poll/${id}`,
                     pollToUpdate
-                )
+                ,
+                {withCredentials:true})
                     .then(res=>{
                         setHasVoted(true)
                         setPoll(res.data.poll)
@@ -56,6 +58,7 @@ const SinglePost = (props) => {
                         setErrorMessage("Your api has some problems!")
                         console.log(err)})
             }
+
             const handleVote3 = (e) => {
                 e.preventDefault()
                 let pollToUpdate = {...poll}
@@ -63,7 +66,8 @@ const SinglePost = (props) => {
                 pollToUpdate.votesCount += 1
                 
                 axios.put(`http://localhost:8000/api/poll/${id}`, 
-                        pollToUpdate
+                        pollToUpdate,
+                        {withCredentials:true}
                     )
                         .then(res=>{
                             setHasVoted(true)
@@ -79,8 +83,9 @@ const SinglePost = (props) => {
                     pollToUpdate.option4Votes += 1
                     pollToUpdate.votesCount += 1
                     axios.put(`http://localhost:8000/api/poll/${id}`, 
-                            pollToUpdate
-                        )
+                            pollToUpdate,
+                            {withCredentials:true}
+                            )
                             .then(res=>{
                                 setHasVoted(true)
                                 setPoll(res.data.poll)

@@ -1,17 +1,18 @@
 import React, {useState} from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from 'axios'
+import { useAuth } from '../AuthContext';
+
 
 const CreatePost = (props) => {
     const navigate = useNavigate()
-
     const [question, setQuestion] = useState("");
     const [option1, setOption1] = useState("")
     const [option2, setOption2] = useState("")
     const [option3, setOption3] = useState("")
     const [option4, setOption4] = useState("")
     const [errorMessage, setErrorMessage] = useState("");
-
+    const userId = localStorage.getItem('userId');
     const navigateBack = () => {
         navigate(-1)
     }
@@ -22,13 +23,17 @@ const CreatePost = (props) => {
             setErrorMessage('Your form has some unsolved issues!')
         }
         else{
+           
             
             axios.post('http://localhost:8000/api/poll', {
-                question,    // this is shortcut syntax for firstName: firstName,
+                question,
                 option1,
                 option2,
                 option3,
-                option4
+                option4,
+                userId: userId
+            }, {
+                withCredentials: true
             })
                 .then(res=>{
                     navigate('/')
